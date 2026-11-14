@@ -52,3 +52,13 @@ body {
   justify-content: center;
   text-align: center;
 }
+
+#score-metrics {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: normal;
+  font-family: "Comic Neue", cursive;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}

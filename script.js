@@ -24,3 +24,58 @@ const metrics = document.createElement('p');
 metrics.id = "metrics";
 metrics.textContent = "Metrics will appear here";
 document.body.appendChild(metrics);
+
+const scoreMetrics = document.createElement("p");
+scoreMetrics.id = "score-metrics";
+document.body.appendChild(scoreMetrics);
+
+
+const feedback = document.createElement("p");
+feedback.id = "feedback";
+document.body.appendChild(feedback);
+
+
+const cleanTarget = test.textContent.replace(/\s+/g, "");
+let currentIndex = 0;
+let correctKeystrokes = 0;
+let startTime = null;
+let isFinished = false;
+
+document.addEventListener("keydown", function (event) {
+
+    if (isFinished || event.key.length !== 1) return;
+
+    if (startTime === null) {
+        startTime = performance.now();
+    }
+
+    const charSpan = document.createElement("span");
+    charSpan.textContent = event.key === " " ? "_" : event.key;
+    charSpan.style.marginRight = "4px";
+    charSpan.style.fontWeight = "bold";
+
+    if (event.key === cleanTarget[currentIndex]) {
+        charSpan.style.color = "green";
+        correctKeystrokes++;
+    } else {
+        charSpan.style.color = "red";
+    }
+
+    feedback.appendChild(charSpan);
+
+    currentIndex++;
+
+    if (currentIndex >= cleanTarget.length) {
+        isFinished = true;
+        const timeSeconds = (performance.now() - startTime) / 1000;
+        const cps = cleanTarget.length / timeSeconds;
+        const accuracyRatio = correctKeystrokes / cleanTarget.length;
+        const accuracyPercent = accuracyRatio * 100;
+        const score = cps * Math.pow(accuracyRatio, 2);
+
+        metrics.textContent = "The End";
+
+
+        scoreMetrics.textContent = `Time: ${timeSeconds.toFixed(2)}s | CPS: ${cps.toFixed(2)} | Accuracy: ${accuracyPercent.toFixed(1)}% | Score: ${score.toFixed(2)}`;
+    }
+});
